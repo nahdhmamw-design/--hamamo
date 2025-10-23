@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HAMAMO — دواء</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="data.js"></script></head>
+<body>
+<header class="header"><div class="logo">HAMAMO</div></header>
+<div class="container">
+  <a href="index.html">← العودة إلى القائمة</a>
+  <main id="drugMain" style="margin-top:12px"></main>
+  <footer class="footer">ملاحظة: المعلومات تعليمية فقط — استشر المختص.</footer>
+</div>
+<script>
+function getParam(name){ const url = new URL(window.location.href); return url.searchParams.get(name); }
+function renderDrug(d){
+  document.title = 'HAMAMO — ' + d.name_ar;
+  const main = document.getElementById('drugMain');
+  main.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:18px">
+      <div style="background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.04)">
+        <h1 style="margin-top:0">${d.name_ar} — ${d.name_en}</h1>
+        <div style="color:#6b7280">${d.brand} • ${d.form}</div>
+        <img src="${d.imageUrl}" style="width:100%;border-radius:10px;margin-top:12px" />
+        <h3>المادة الفعّالة</h3><p><strong>${d.activeIngredient}</strong></p>
+        <p>${d.description}</p>
+        <h3>مصادر</h3><ul>${d.sources.map(s=>`<li><a href="${s}" target="_blank">${s}</a></li>`).join('')}</ul>
+      </div>
+      <aside style="background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.04)">
+        <h3>الجرعات التوضيحية حسب الفئة</h3>
+        <canvas id="doseChart" width="400" height="260"></canvas>
+        <p style="background:#fff3cd;padding:10px;border-radius:8px;color:#8a6d3b;border:1px solid #ffeeba;margin-top:8px">
+          تحذير: القيم هنا توضيحية فقط ولا تعبر عن جرعات فعلية. استشر مختصًا للحصول على الجرعات الصحيحة.
+        </p>
+      </aside>
+    </div>
+  `;
+  // render chart
+  const profile = d.dosingProfile;
+  const ctx = document.getElementById('doseChart').getContext('2d');
+  new Chart(ctx, { type:'bar', data:{ labels:['رضع','أطفال','مراهقين','بالغين','كبار السن'], datasets:[{ label:'قيمة توضيحية', data:[profile.infants,profile.children,profile.adolescents,profile.adults,profile.elderly], backgroundColor:['#1e88e5','#7c4dff','#06b6d4','#10b981','#ef4444'] }] }, options:{ responsive:true, scales:{ y:{ beginAtZero:true } } } });
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  const id = getParam('id');
+  if(!id){ document.getElementById('drugMain').innerHTML = '<p>لم يتم تحديد دواء. عد إلى <a href="index.html">القائمة</a>.</p>'; return; }
+  const d = DATA.find(x=> x.id === id);
+  if(!d){ document.getElementById('drugMain').innerHTML = '<p>لم يتم العثور على الدواء المطلوب.</p>'; return; }
+  renderDrug(d);
+});
+</script>
+</body>
+</html>

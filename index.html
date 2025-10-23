@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ar">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HAMAMO — دليل الأدوية (Local)</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="data.js"></script></head>
+<body>
+<header class="header"><div class="logo">HAMAMO</div></header>
+<div class="container">
+  <div class="searchRow">
+    <input id="searchInput" placeholder="ابحث عن دواء، مادة فعالة، أو شكل صيدلي..." />
+    <div class="controls">
+      <select id="sortSelect"><option value="alpha">أ — ي</option><option value="alpha_rev">ي — أ</option><option value="form">حسب الشكل</option></select>
+    </div>
+  </div>
+  <div class="grid">
+    <aside class="sidebar">
+      <h3>الأشكال الصيدلية</h3>
+      <div id="formsList" class="filter-list"></div>
+    </aside>
+    <main class="main">
+      <div id="resultsCount">عرض 0 نتيجة</div>
+      <section id="resultsGrid" class="results"></section>
+    </main>
+  </div>
+  <footer class="footer">ملاحظة: المعلومات تعليمية فقط — استشر مختص الرعاية الصحية.</footer>
+</div>
+<script src="index_script.js"></script>
+</body>
+</html>
